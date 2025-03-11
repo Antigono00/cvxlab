@@ -1,0 +1,396 @@
+:root {
+  --primary-color: #4CAF50;
+  --primary-dark: #45a049;
+  --accent-color: #7e57c2;
+  --bg-dark: #1a1a1a;
+  --panel-bg: rgba(30, 30, 30, 0.95);
+  --text-light: #ffffff;
+  --text-dim: #a0a0a0;
+  --cat-lair-color: #4CAF50;
+  --reactor-color: #2196F3;
+  --amplifier-color: #9C27B0;
+  --incubator-color: #FF5722;  /* Add incubator color */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Orbitron", sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  position: relative;
+}
+
+/* Telegram login modal */
+.telegram-login-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--panel-bg);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  z-index: 2000;
+  max-width: 400px;
+  text-align: center;
+}
+
+.telegram-login-modal h2 {
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  font-family: "Orbitron", sans-serif;
+}
+
+/* Burger menu button */
+.mobile-menu-btn {
+  display: none; /* hidden on desktop by default */
+  background: var(--accent-color);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
+  z-index: 9999;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  margin: 0;
+}
+
+.game-container {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  max-width: 1200px;
+  max-height: 700px;
+}
+
+.side-panel {
+  background: rgba(40, 40, 40, 0.95);
+  padding: 20px;
+  width: 300px;
+  min-width: 300px;
+  height: 600px;
+  border-radius: 10px 0 0 10px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.hud {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.resource {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  transition: transform 0.2s;
+}
+.resource:hover {
+  transform: translateX(5px);
+}
+.resource-icon {
+  font-size: 1.2em;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+}
+.resource-value {
+  font-family: "Orbitron", sans-serif;
+  font-weight: bold;
+  color: var(--primary-color);
+  text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+  margin-left: auto;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Orbitron", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+}
+button:hover:not(.disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+}
+button:hover:not(.disabled)::after {
+  transform: translateX(100%);
+  transition: transform 0.5s ease;
+}
+button:active:not(.disabled) {
+  transform: translateY(0);
+}
+button.disabled, button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(1);
+  background: #555 !important; /* Force grey background for clarity */
+}
+
+#gameCanvas {
+  border-radius: 0 10px 10px 0;
+  flex: 1;
+  height: 600px;
+}
+
+/* Welcome message */
+.welcome-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--panel-bg);
+  color: var(--text-light);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  z-index: 10001;
+  max-width: 600px;
+  text-align: left;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.welcome-message h1 {
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  font-family: "Orbitron", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.welcome-message ul {
+  padding-left: 20px;
+  margin-bottom: 30px;
+}
+.welcome-message li {
+  margin: 15px 0;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+.welcome-message li strong {
+  color: var(--accent-color);
+  font-family: "Orbitron", sans-serif;
+}
+
+.panel-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.2em;
+  margin-bottom: 15px;
+  color: var(--primary-color);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+  padding-bottom: 10px;
+}
+.key {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--accent-color);
+  border-radius: 4px;
+  font-family: "Orbitron", sans-serif;
+  color: white;
+  margin: 0 2px;
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px var(--primary-color); }
+  50% { box-shadow: 0 0 20px var(--primary-color); }
+  100% { box-shadow: 0 0 5px var(--primary-color); }
+}
+.glow-effect {
+  animation: glow 2s infinite;
+}
+
+/* MOBILE MINI-HUD (responsive approach) */
+.mobile-hud {
+  display: none; /* hidden on desktop or wide screens by default */
+}
+
+/* Game sections styling */
+#building-panel, #level-up-panel {
+  margin-bottom: 20px;
+}
+
+/* Colored buttons by machine type */
+button[id^="build-catLair"], button[id^="level-up-catLair"] {
+  background: linear-gradient(135deg, var(--cat-lair-color), darkgreen);
+}
+
+button[id^="build-reactor"], button[id^="level-up-reactor"] {
+  background: linear-gradient(135deg, var(--reactor-color), darkblue);
+}
+
+button[id^="build-amplifier"], button[id^="level-up-amplifier"] {
+  background: linear-gradient(135deg, var(--amplifier-color), darkmagenta);
+}
+
+/* Add incubator button styling */
+button[id^="build-incubator"], button[id^="level-up-incubator"] {
+  background: linear-gradient(135deg, var(--incubator-color), #E64A19);
+}
+
+@media (max-width: 768px) {
+  /* Show the burger on small screens */
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  /* Make the container simpler on mobile */
+  .game-container.mobile {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+  }
+
+  /* The side panel slides in/out from the left */
+  .game-container.mobile .side-panel {
+    position: absolute;
+    top: 60px; /* below the burger */
+    left: 0;
+    transform: translateX(-100%);
+    width: 80vw;
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+    border-radius: 0 10px 10px 0;
+  }
+
+  .game-container.mobile .side-panel.open {
+    transform: translateX(0);
+  }
+
+  /* Now the mini-hud appears on mobile screens */
+  .mobile-hud {
+    display: flex !important;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 9998;
+    gap: 10px;
+    justify-content: space-around;
+    background: rgba(0,0,0,0.75);
+    border-radius: 10px;
+    padding: 6px;
+  }
+
+  .mobile-resource {
+    font-family: "Orbitron", sans-serif;
+    font-size: 14px;
+    color: var(--primary-color);
+  }
+
+  #gameCanvas {
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* Extra box for low TCorvax messages */
+.low-corvax-message {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(30, 30, 30, 0.95);
+  padding: 20px;
+  color: #fff;
+  border-radius: 12px;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 8px 32px rgba(76,175,80,0.4);
+  max-width: 400px;
+  z-index: 10010;
+  text-align: center;
+}
+.low-corvax-message a {
+  color: #ffcc00;
+  text-decoration: underline;
+}
+
+/* Radix Connect Button positioning */
+.radix-connect-wrapper {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: rgba(30, 30, 30, 0.7);
+  padding: 10px;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure Radix button is properly sized */
+.radix-connect-wrapper radix-connect-button {
+  display: block;
+  --radix-connect-button-height: 40px;
+}
+
+/* On mobile, adjust position to avoid overlap with menu */
+@media (max-width: 768px) {
+  .radix-connect-wrapper {
+    top: 10px;
+    right: 70px; /* Leave space for the mobile menu button */
+  }
+}
+
+/* Radix Connect Button styling */
+#radix-connect-container {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
+
+radix-connect-button {
+  display: block;
+  margin: 0 auto;
+}
